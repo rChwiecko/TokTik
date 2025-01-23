@@ -25,7 +25,7 @@ export async function OnboardingDetails() {
           <div className="px-8 py-2">
             <dt className="text-sm font-semibold">Application Type</dt>
             <dd className="mt-1 text-sm text-gray-600 sm:mt-0 sm:col-span-2 flex gap-2">
-              {sessionClaims?.metadata.applicationType}
+              {sessionClaims?.metadata.preferences}
             </dd>
           </div>
         </dl>
