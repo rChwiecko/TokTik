@@ -1,82 +1,106 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import { completeOnboarding } from "./_actions";
+import * as React from "react"
+import { useUser } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
+import { Gamepad2, Plane, Music2, Film, Dumbbell, Palette, ChefHat, Trophy } from "lucide-react"
+import { completeOnboarding } from "./_actions"
+import { Progress } from "@/components/ui/progress"
+import { cn } from "@/lib/utils"
+
+const genres = [
+  { name: "Sports", icon: Trophy },
+  { name: "Video Games", icon: Gamepad2 },
+  { name: "Travel", icon: Plane },
+  { name: "Music", icon: Music2 },
+  { name: "Movies", icon: Film },
+  { name: "Fitness", icon: Dumbbell },
+  { name: "Art", icon: Palette },
+  { name: "Cooking", icon: ChefHat },
+]
 
 export default function OnboardingComponent() {
-  const { user } = useUser();
-  const router = useRouter();
+  const { user } = useUser()
+  const router = useRouter()
+  const [selectedGenres, setSelectedGenres] = React.useState<string[]>([])
 
-  const genres = ["Sports", "Video Games", "Travel", "Music", "Movies", "Fitness", "Art", "Cooking"];
-  const [selectedGenres, setSelectedGenres] = React.useState<string[]>([]);
+  const progress = (selectedGenres.length / 3) * 100 // Assuming we want users to select at least 3
 
   const handleGenreToggle = (genre: string) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
-    );
-  };
+    setSelectedGenres((prev) => (prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]))
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-    formData.append("preferences", JSON.stringify(selectedGenres));
-
-    await completeOnboarding(formData);
-    await user?.reload();
-    router.push("/dashboard");
-  };
+    event.preventDefault()
+    const formData = new FormData()
+    formData.append("preferences", JSON.stringify(selectedGenres))
+    await completeOnboarding(formData)
+    await user?.reload()
+    router.push("/dashboard")
+  }
 
   return (
-    <div className="px-8 py-12 sm:py-16 md:px-20">
-      <div className="mx-auto bg-white overflow-hidden rounded-lg shadow-lg max-w-sm">
-        <div className="p-8">
-          <h3 className="text-xl font-semibold text-gray-900">Welcome!</h3>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 px-8 pb-8">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">
-                Preferences
-              </label>
-              <p className="text-xs text-gray-500">
-                Select the genres you are interested in.
-              </p>
-              <div className="mt-2 space-y-2">
-                {genres.map((genre) => (
-                  <div key={genre} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={genre}
-                      name="preferences"
-                      value={genre}
-                      checked={selectedGenres.includes(genre)}
-                      onChange={() => handleGenreToggle(genre)}
-                      className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background px-4">
+      <div className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full space-y-8 rounded-xl border bg-card p-8 shadow-lg"
+        >
+          <div className="space-y-2 text-center">
+            <h1 className="text-3xl font-bold tracking-tight">Welcome!</h1>
+            <p className="text-muted-foreground">Let's personalize your experience. What interests you?</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Select at least 3 interests</span>
+                <span className="font-medium">{selectedGenres.length} selected</span>
+              </div>
+              <Progress value={progress} className="h-2" />
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                {genres.map(({ name, icon: Icon }) => (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                    key={name}
+                    onClick={() => handleGenreToggle(name)}
+                    className={cn(
+                      "group flex flex-col items-center justify-center rounded-lg border border-border p-4 text-center transition-colors hover:bg-accent",
+                      selectedGenres.includes(name) && "border-primary bg-primary/5 text-primary",
+                    )}
+                  >
+                    <Icon
+                      className={cn(
+                        "mb-2 h-8 w-8",
+                        selectedGenres.includes(name)
+                          ? "text-primary"
+                          : "text-muted-foreground group-hover:text-foreground",
+                      )}
                     />
-                    <label
-                      htmlFor={genre}
-                      className="ml-2 text-sm font-medium text-gray-700"
-                    >
-                      {genre}
-                    </label>
-                  </div>
+                    <span className="text-sm font-medium">{name}</span>
+                  </motion.button>
                 ))}
               </div>
-            </div>
+
+              <button
+                type="submit"
+                disabled={selectedGenres.length < 3}
+                className="w-full rounded-lg bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Continue
+              </button>
+            </form>
           </div>
-          <div className="px-8 py-4 bg-gray-50">
-            <button
-              type="submit"
-              className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
+        </motion.div>
       </div>
     </div>
-  );
+  )
 }
+
