@@ -6,6 +6,7 @@ declare global {
       onboardingComplete?: boolean;
       applicationName?: string;
       preferences?: string[];
+      preferenceVector?: number[];
     };
     firstName?: string;
   }

@@ -1,8 +1,4 @@
-import {
-  ClerkProvider,
-  SignedIn,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -25,78 +21,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <ClerkProvider signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard" afterSignOutUrl="/" >
+      <ClerkProvider
+        signInFallbackRedirectUrl="/dashboard"
+        signUpFallbackRedirectUrl="/dashboard"
+        afterSignOutUrl="/"
+      >
         <body className={`${inter.className} min-h-screen flex flex-col`}>
-
-          <header className="flex items-center h-20 gap-4 px-4 border-b border-black border-solid sm:px-8 border-opacity-20">
-            <Link href="/" className="flex items-center h-20 gap-2 sm:gap-4">
-              <Image
-                src="/clerk.svg"
-                alt="Clerk Logo"
-                width={102}
-                height={32}
-                priority
-              />
-            </Link>
-            <div className="grow" />
-
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-
-
-
           <main className="grow">{children}</main>
-
-
-          <footer className="flex items-center h-20 gap-1 px-8 font-medium border-t md:px-20">
-            <a
-              className="flex gap-2 px-3 py-2 text-m font-semibold text-gray-600 transition duration-100 rounded-md hover:text-gray-800"
-              href="https://github.com/clerk/clerk-nextjs-onboarding-sample-app"
-            >
-              <span className="hidden sm:inline">View the Github Repo for this Sample App</span>
-            </a>
-
-            <nav className="flex justify-end grow sm:gap-2">
-              <a
-                className="flex gap-2 px-3 py-2 text-sm font-semibold text-gray-600 transition duration-100 rounded-md hover:text-gray-800"
-                href="https://clerk.com/docs"
-              >
-                <div className="m-auto">
-                  <Docs />
-                </div>
-                <span className="hidden sm:inline"> Visit Clerk Docs</span>
-              </a>
-              <a
-                className="flex gap-2 px-3 py-2 text-sm font-semibold text-gray-600 transition duration-100 rounded-md hover:text-gray-800"
-                href="https://github.com/clerk"
-              >
-                <div className="m-auto">
-                  <Github />
-                </div>
-              </a>
-              <a
-                className="flex flex-col justify-center p-2 hover:underline"
-                href="https://twitter.com/ClerkDev"
-              >
-                <Twitter />
-              </a>
-              <a
-                className="flex flex-col justify-center p-2 hover:underline"
-                href="https://discord.com/invite/b5rXHjAg7A"
-              >
-                <Discord />
-              </a>
-            </nav>
-          </footer>
         </body>
       </ClerkProvider>
-
     </html>
   );
 }
-
 
 function Docs() {
   return (
@@ -185,5 +121,3 @@ function Discord() {
     </svg>
   );
 }
-
-

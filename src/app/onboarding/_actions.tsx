@@ -19,6 +19,7 @@ export const completeOnboarding = async (formData: FormData) => {
                 applicationName: formData.get("applicationName"),
                 applicationType: formData.get("applicationType"),
                 preferences: preferences, // Add preferences to metadata
+                preferenceVector: 12,
             }
         });
         return { message: "User metadata Updated" };
