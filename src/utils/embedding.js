@@ -11,12 +11,8 @@ async function getEmbedding(text) {
 
   const embedding = await embedder(text, { pooling: "mean", normalize: true });
 
-  console.log("Generated Embedding (Original):", embedding.data);
-
   // Convert Float32Array to a regular JavaScript array
   const embeddingArray = Array.from(embedding.data);
-
-  console.log("Converted Embedding (JSON-safe):", embeddingArray);
 
   return embeddingArray;
 }
