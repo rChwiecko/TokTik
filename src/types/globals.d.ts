@@ -1,4 +1,4 @@
-export { };
+export {};
 
 declare global {
   interface CustomJwtSessionClaims {
@@ -6,7 +6,7 @@ declare global {
       onboardingComplete?: boolean;
       applicationName?: string;
       preferences?: string[];
-      preferenceVector?: number[];
+      preferenceVector?: number[] | any;
     };
     firstName?: string;
   }
