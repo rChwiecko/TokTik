@@ -52,18 +52,18 @@ export const completeOnboarding = async (formData: FormData) => {
       console.log("🎨 Preferences: ", typeof preferencesString);
       console.log("🧠 Embedding: ", typeof embeddingString);
 
-      // await prisma.userPreference.upsert({
-      //   where: { userId: prismaUserId },
-      //   update: {
-      //     preferences: preferencesString,
-      //     embedding: embeddingString
-      //   },
-      //   create: {
-      //     userId: prismaUserId,
-      //     preferences: preferencesString,
-      //     embedding: embeddingString,
-      //   },
-      // });
+      await prisma.userPreference.upsert({
+        where: { userId: prismaUserId },
+        update: {
+          preferences: preferencesString,
+          embedding: embeddingString
+        },
+        create: {
+          userId: prismaUserId,
+          preferences: preferencesString,
+          embedding: embeddingString,
+        },
+      });
 
       console.log("✅ Stored Embedding in DB Successfully");
     } catch (prismaError) {
